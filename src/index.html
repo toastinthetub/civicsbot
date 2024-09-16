@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>cebot :)</title>
+    <style>
+        /* Global styles for the body */
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #1a1a1a;
+            margin: 0;
+            padding: 0;
+            color: white;
+        }
+
+        /* Top container */
+        .top_container {
+            background-color: #000;
+            padding: 5px;
+            width: 100%;
+            height: 15vh;
+            box-sizing: border-box;
+            border: 2px solid #fff;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+
+        .top_container h1 {
+            margin-top: 0px;
+            color: #f0f0f0; /* Light grey for the title */
+            font-size: 1.2rem; /* Reduced font size to fit inside the container */
+            margin: 0; /* Remove default margin */
+            line-height: 1.2; /* Tighter line height */
+            text-transform: uppercase; /* Uppercase letters */
+            letter-spacing: 1px; /* Space between letters */
+        }
+
+        .inner_container {
+            background-color: darkslategrey;
+            padding: 5px;
+            width: 100%; /* Adjust as needed */
+            height: 6vh;
+            box-sizing: border-box;
+            text-align: center; /* Center text inside .inner_container */
+        }
+
+        /* Bottom container for columns */
+        .bottom_container {
+            display: flex;
+            width: 100%;
+            height: 85vh;
+            box-sizing: border-box;
+        }
+
+        /* Column styling */
+        .column {
+            flex: 1;
+            padding: 20px;
+            margin: 5px;
+            color: #fff;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+
+        /* First column */
+        .column:nth-child(1) {
+            background-color: #0037ff; /* Red */
+        }
+
+        /* Second column */
+        .column:nth-child(2) {
+            background-color: #76adff; /* Blue */
+        }
+
+        /* Third column */
+        .column:nth-child(3) {
+            background-color: #fc7f7f; /* Green */
+        }
+
+        /* Fourth column */
+        .column:nth-child(4) {
+            background-color: #ff0000; /* Yellow */
+        }
+
+        /* Header for each column */
+        .column h3 {
+            margin-bottom: 0px;
+            font-size: 1.3rem;
+        }
+
+        /* Paragraph styling */
+        .column p {
+            color: #ccc;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top container -->
+    <div class="top_container">
+        <h1 style="text-align: left;margin-bottom: 0px;">CURRENT EVENTS BIAS CHEAT SHEET</h1>
+        <p style="text-align: left; margin-top: 0px;margin-bottom: 0px;">Below is a list of URLs (links) to articles from various different sources and biases. I know how big of a pain in the ass it is to go and find sources of different political biases, so I made this! Every 6 hours this website will query <a href="https://newsapi.org/" style="color: aqua;">NewsAPI</a> for the latest news from a variety of sources. Enjoy.</p> 
+        <div class="inner_container" align="center">
+            <h1 style="color: #51ff00;margin-top: 0px;">UPDATES:</h1><p style="color: #f0f0f0;margin-top: 0px;">This website is still in very early developement! You're welcome to look at the <a href="https://github.com/toastinthetub/civicsbot/" style="color: aqua;">github page</a> for more consistent updates... :)</K></p>
+        </div>
+    </div>
+
+    <!-- Bottom container with four columns -->
+    <div class="bottom_container">
+        <div class="column">
+            <h3>LEFT</h3>
+            <p>Here lie articles that MFCB says lean palpably to the left.</p>
+        </div>
+        <div class="column">
+            <h3>LEFT-CENTER</h3>
+            <p>Here lie articles that MFCB says lean sort of to the left.</p>
+        </div>
+        <div class="column">
+            <h3>RIGHT-CENTER</h3>
+            <p>Here lie articles that MFCB says lean sort of to the right.</p>
+        </div>
+        <div class="column">
+            <h3>RIGHT</h3>
+            <p>Here lie articles that MFCB says lean palpably to the right.</p>
+        </div>
+    </div>
+</body>
+</html>
