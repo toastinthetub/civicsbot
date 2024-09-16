@@ -49,7 +49,7 @@ impl Article {
         let description = String::from("PLACEHOLDER DESCRIPTION");
         let url = String::from("www.PLACEHOLDER.com");
         let url_to_image = String::from("www.PLACEHOLDER.com");
-        let published_at = String::from("PL:AC::EH");
+        let published_at = String::from("PL:AC:EH");
         let content = Some(String::from("PLACEHOLDER"));
         Self {
             source,

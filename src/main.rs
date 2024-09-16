@@ -38,7 +38,9 @@ async fn main() {
     });
 
     let news_thread = tokio::spawn(async {
-        newsloop().await;
+        loop {
+            4
+        }
     });
 
     let _ = tokio::join!(server_thread, news_thread);
