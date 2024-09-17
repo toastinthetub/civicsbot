@@ -12,6 +12,7 @@ use axum::{
 };
 
 use axum::{extract::Path, Form, Json};
+use json::ApiConfiguration;
 use serde::{Deserialize, Serialize};
 
 use crate::handlers::*;
@@ -38,10 +39,17 @@ async fn main() {
     });
 
     let news_thread = tokio::spawn(async { // ok dope this works
+        let api_config = ApiConfiguration::construct(16);
+
+        let articles = api_config.get_articles().await.unwrap();
+        println!("Here are the titles of the fetched articles:");
+        for (i, article) in articles.iter().enumerate() {
+            println!("Article {}: {}", i + 1, article.title);
+        }
         loop {
             println!("This is a thread.");
             tokio::time::sleep(std::time::Duration::from_secs(3)).await;
-            
+
         }
     });
 

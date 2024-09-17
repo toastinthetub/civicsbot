@@ -1,54 +1,49 @@
 use serde::{Deserialize, Serialize};
+use reqwest;
+use std::error::Error;
 
 const URL: &str = "https://newsapi.org/v2/top-headlines";
-const API_KEY: &str = "9a59ccce07b843869847fddf6de18c5d"; // REMEMBER TO DELETE THIS BEFORE COMMIT // oops.
-
-
-// https://newsapi.org/v2/top-headlines?apiKey=YOUR_API_KEY&country=us&pageSize=5
+const API_KEY: &str = "9a59ccce07b843869847fddf6de18c5d"; // REMEMBER TO DELETE THIS BEFORE COMMIT
 
 pub enum Country {
     US,
-    UK
+    UK,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ArticleSource {
-    id: Option<String>,  // id can be None
-    name: String,
+    pub id: Option<String>,  // id can be None
+    pub name: String,
 }
 
 impl ArticleSource {
     pub fn new_empty() -> Self {
         let id: Option<String> = Some(String::new());
         let name = String::from("PLACEHOLDER");
-        Self {
-            id,
-            name
-        }
+        Self { id, name }
     }
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Article {
-
-    source: ArticleSource,
-    author: Option<String>,  // author can be None
-    title: String,
-    description: String,
-    url: String,
-    url_to_image: String,
-    published_at: String,  // Consider using chrono for a more sophisticated date/time handling
-    content: Option<String>,  // content can be None
+    pub source: ArticleSource,
+    pub author: Option<String>,  // author can be None
+    pub title: String,
+    pub description: Option<String>, // description can be None
+    pub url: String,
+    pub url_to_image: Option<String>, // can be None
+    pub published_at: String,  // Consider using chrono for better date/time handling
+    pub content: Option<String>,  // content can be None
 }
 
 impl Article {
-    pub fn new_empty() -> Self { // returns an empty article, so that we can put something in the vector of Mutex
+    pub fn new_empty() -> Self {
         let source = ArticleSource::new_empty();
         let author: Option<String> = Some(String::from("PLACEHOLDER AUTHOR"));
         let title = String::from("PLACEHOLDER TITLE");
-        let description = String::from("PLACEHOLDER DESCRIPTION");
+        let description = Some(String::from("PLACEHOLDER DESCRIPTION"));
         let url = String::from("www.PLACEHOLDER.com");
-        let url_to_image = String::from("www.PLACEHOLDER.com");
+        let url_to_image = Some(String::from("www.PLACEHOLDER.com"));
         let published_at = String::from("PL:AC:EH");
         let content = Some(String::from("PLACEHOLDER"));
         Self {
@@ -59,38 +54,78 @@ impl Article {
             url,
             url_to_image,
             published_at,
-            content
+            content,
         }
     }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ApiResponse {
+    status: String,
+    total_results: Option<i32>,
+    articles: Vec<Article>,
 }
 
 pub struct ApiConfiguration {
     url: String,
     key: String,
-    country: /*Country*/ String ,
-    narticles: i32
+    country: String, // Represent the country as a string
+    narticles: i32,
 }
 
 impl ApiConfiguration {
-    pub fn construct(n: i32) -> Self { // constructs ApiConfig instance. needs URL, key, and n
+    pub fn construct(n: i32) -> Self {
         let url = URL.to_owned();
         let key = API_KEY.to_owned();
-        let country = "US".to_owned();
+        let country = "us".to_owned(); // Default to "us", can change later if needed
         let narticles = n;
 
         Self {
             url,
             key,
             country,
-            narticles   
+            narticles,
         }
     }
-    
-    pub async fn get_news_json(&self) -> String {
-        // for now we will fetch 5 articles ...
-        let mut endpoint: String = String::new();
-        endpoint = format!("{}?apikey={}&country={}&pageSize={}", self.url, self.key, self.country, self.narticles);
+
+    pub async fn get_news_json(&self) -> Result<String, Box<dyn Error>> {
+        // Construct the API endpoint URL
+        let endpoint = format!(
+            "{}?apiKey={}&country={}&pageSize={}",
+            self.url, self.key, self.country, self.narticles
+        );
         println!("constructed endpoint: '{}'", endpoint);
-        return endpoint
+
+        // Send the request and retrieve the response as a string
+        let response = reqwest::get(&endpoint).await?.text().await?;
+        Ok(response)
     }
+
+    // New method to get and deserialize articles into a Vec<Article>
+    pub async fn get_articles(&self) -> Result<Vec<Article>, Box<dyn Error>> {
+        // Fetch the news JSON string
+        let json_response = self.get_news_json().await?;
+
+        // Deserialize the JSON response into an ApiResponse struct
+        let api_response: ApiResponse = serde_json::from_str(&json_response)?;
+
+        // Return the articles from the ApiResponse
+        Ok(api_response.articles)
+    }
+}
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn Error>> {
+    // Create the API configuration with 16 articles to retrieve
+    let api_config = ApiConfiguration::construct(16);
+
+    // Get the articles
+    let articles = api_config.get_articles().await?;
+
+    // Print the articles
+    for (i, article) in articles.iter().enumerate() {
+        println!("Article {}: {}", i + 1, article.title);
+    }
+
+    Ok(())
 }
