@@ -19,7 +19,7 @@ use crate::handlers::*;
 #[tokio::main]
 async fn main() {
 
-    let articles: Arc<Mutex<Vec<crate::json::Article>>> = Arc::new(Mutex::new(vec![crate::json::Article::new_empty()]));
+    let articles: Arc<Mutex<Vec<crate::json::Article>>> = Arc::new(Mutex::new(Vec::new()));
 
     let server_thread = tokio::spawn(async {
         let app: Router = Router::new().route("/", get(get_handler).post(post_handler));
@@ -37,15 +37,13 @@ async fn main() {
         axum::serve(listener, app).await.unwrap();
     });
 
-    let news_thread = tokio::spawn(async {
+    let news_thread = tokio::spawn(async { // ok dope this works
         loop {
-            4
+            println!("This is a thread.");
+            tokio::time::sleep(std::time::Duration::from_secs(3)).await;
+            
         }
     });
 
     let _ = tokio::join!(server_thread, news_thread);
-}
-
-async fn newsloop() {
-    
 }

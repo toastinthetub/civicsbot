@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 const URL: &str = "https://newsapi.org/v2/top-headlines";
-const API_KEY: &str = "9a59ccce07b843869847fddf6de18c5d"; // REMEMBER TO DELETE THIS BEFORE COMMIT
+const API_KEY: &str = "9a59ccce07b843869847fddf6de18c5d"; // REMEMBER TO DELETE THIS BEFORE COMMIT // oops.
 
 
 // https://newsapi.org/v2/top-headlines?apiKey=YOUR_API_KEY&country=us&pageSize=5
